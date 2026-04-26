@@ -25,7 +25,7 @@
             <div class="line typing">This page explains what TSCPP is about and where to find help.</div>
             <div class="line typing">If you see an error code in the site, open the error codes page to get the meaning.</div>
             <div class="line typing">Use the errorcodes page for explanations of common site errors.</div>
-            <div class="line typing">Commands you can use here: home, help</div>
+            <div class="line typing">Commands you can use here: home, help, status</div>
             <div class="line prompt input-line">TSCPP@about:~$ <input id="commandInput" autocomplete="off" spellcheck="false" /></div>
           </div>
         </div>
@@ -101,6 +101,12 @@
           if (normalized === 'help') {
             appendOutput('Opening help page...', 'typing active');
             setTimeout(() => window.location.href = 'page2.html', 600);
+            return;
+          }
+
+          if (normalized === 'status') {
+            appendOutput('Opening Status page...', 'typing active');
+            setTimeout(() => window.location.href = 'status.html', 600);
             return;
           }
 

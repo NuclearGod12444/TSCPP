@@ -28,7 +28,7 @@
             <div class="line typing">- bot - bot commands and support</div>
             <div class="line typing">- announcements - server updates and events</div>
             <div class="line typing">Need help on Discord? Ping a staff member or ask in support channels.</div>
-            <div class="line typing">Commands you can use here: home, help, rules, errorcodes</div>
+            <div class="line typing">Commands you can use here: home, help, status, rules, errorcodes</div>
             <div class="line prompt input-line">TSCPP@discord:~$ <input id="commandInput" autocomplete="off" spellcheck="false" /></div>
           </div>
         </div>
@@ -103,6 +103,12 @@
           if (normalized === 'help') {
             appendOutput('Opening help page...', 'typing active');
             setTimeout(() => window.location.href = 'page2.html', 600);
+            return;
+          }
+
+          if (normalized === 'status') {
+            appendOutput('Opening Status page...', 'typing active');
+            setTimeout(() => window.location.href = 'status.html', 600);
             return;
           }
 

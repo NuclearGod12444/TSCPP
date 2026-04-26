@@ -27,6 +27,7 @@
             <div class="line typing">page2 - also opens this help page from the main terminal.</div>
             <div class="line typing">info/information/about - open the About TSCPP page.</div>
             <div class="line typing">errorcodes/errors - open the Error Codes page.</div>
+            <div class="line typing">status - open the Status page.</div>
             <div class="line typing">rules - open the Rules page.</div>
             <div class="line typing">discord - open the Discord info page.</div>
             <div class="line typing">home - return to the main page from here.</div>
@@ -108,7 +109,13 @@
           }
 
           if (normalized === 'help' || normalized === 'commands') {
-            appendOutput('Commands: help, page2, info, about, information, errorcodes, errors, home, commands, rules, discord', 'typing active');
+            appendOutput('Commands: help, page2, info, about, information, errorcodes, errors, status, home, commands, rules, discord', 'typing active');
+            return;
+          }
+
+          if (normalized === 'status') {
+            appendOutput('Opening Status page...', 'typing active');
+            setTimeout(() => window.location.href = 'status.html', 600);
             return;
           }
 

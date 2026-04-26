@@ -29,7 +29,7 @@
             <div class="line typing">E006 - "BAD_INPUT" - The input format is incorrect, try a different command style.</div>
             <div class="line typing">E007 - "UNKNOWN_ERROR" - An unexpected error occurred; try again later.</div>
             <div class="line typing">For more details, ask a staff member or check the help page.</div>
-            <div class="line typing">Commands from here: home, help</div>
+            <div class="line typing">Commands from here: home, help, status</div>
             <div class="line prompt input-line">TSCPP@errors:~$ <input id="commandInput" autocomplete="off" spellcheck="false" /></div>
           </div>
         </div>
@@ -105,6 +105,12 @@
           if (normalized === 'help') {
             appendOutput('Opening help page...', 'typing active');
             setTimeout(() => window.location.href = 'page2.html', 600);
+            return;
+          }
+
+          if (normalized === 'status') {
+            appendOutput('Opening Status page...', 'typing active');
+            setTimeout(() => window.location.href = 'status.html', 600);
             return;
           }
 
