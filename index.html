@@ -43,13 +43,13 @@
         const discordGuildId = '1492600121668534553';
         async function fetchDiscordMemberCount() {
           if (!memberCountTarget) return;
-          if (!discordGuildId || discordGuildId === '1492600121668534553') {
+          if (!discordGuildId) {
             memberCountTarget.textContent = 'UNAVAILABLE';
             return;
           }
 
           try {
-            const response = await fetch(`https://discord.com/api/guilds/1492600121668534553/widget.json`);
+            const response = await fetch(`https://discord.com/api/guilds/${discordGuildId}/widget.json`);
             if (!response.ok) throw new Error('Discord widget unavailable');
             const data = await response.json();
             if (data && Array.isArray(data.members)) {
