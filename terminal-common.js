@@ -30,6 +30,27 @@ function handleDisabledCommand(normalized, appendOutput) {
   return true;
 }
 
+function getBootLockState() {
+  return localStorage.getItem('terminalBootLocked') === 'true';
+}
+
+function setBootLockState(value) {
+  if (value) {
+    localStorage.setItem('terminalBootLocked', 'true');
+  } else {
+    localStorage.removeItem('terminalBootLocked');
+  }
+}
+
+function showBootFailure(terminalContent) {
+  if (!terminalContent) return;
+  terminalContent.innerHTML = '';
+  const failureLine = document.createElement('div');
+  failureLine.className = 'line typing active terminal-error';
+  failureLine.textContent = 'terminal failed to boot';
+  terminalContent.appendChild(failureLine);
+}
+
 const SESSION_TIMEOUT_MS = 20 * 60 * 1000;
 const SESSION_TIMEOUT_SECONDS = 20 * 60;
 let sessionTimeoutId = null;

@@ -290,7 +290,8 @@ body.theme-red .terminal-screen {
 }
 
 .status.error,
-.status.critical {
+.status.critical,
+.line.terminal-error {
   color: #f87171;
   text-shadow: 0 0 24px rgba(248, 113, 113, 0.85);
   animation: shake 0.85s ease-in-out infinite;

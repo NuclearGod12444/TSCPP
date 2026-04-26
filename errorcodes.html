@@ -51,6 +51,16 @@
       document.addEventListener('DOMContentLoaded', () => {
         const typingLines = Array.from(document.querySelectorAll('.terminal-content .line.typing'));
         const commandInput = document.getElementById('commandInput');
+        const terminalContent = document.querySelector('.terminal-content');
+        const lockableStatuses = Array.from(document.querySelectorAll('.terminal-content [data-lockable].status'));
+        const pageLockEnabled = lockableStatuses.some((el) => el.classList.contains('error') || el.classList.contains('critical'));
+        if (lockableStatuses.length > 0) {
+          setBootLockState(pageLockEnabled);
+        }
+        if (getBootLockState()) {
+          showBootFailure(terminalContent);
+          return;
+        }
 
         function wait(ms) {
           return new Promise(resolve => setTimeout(resolve, ms));
