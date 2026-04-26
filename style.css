@@ -116,6 +116,35 @@ body::before {
   visibility: visible;
 }
 
+.input-line {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.input-line input {
+  background: transparent;
+  border: none;
+  color: inherit;
+  font: inherit;
+  width: min(100%, 100%);
+  outline: none;
+  caret-color: #e5e5e5;
+  letter-spacing: 0.03em;
+}
+
+.input-line input::-webkit-input-placeholder {
+  color: rgba(211,211,211,0.55);
+}
+
+.input-line input:-ms-input-placeholder {
+  color: rgba(211,211,211,0.55);
+}
+
+.input-line input::placeholder {
+  color: rgba(211,211,211,0.55);
+}
+
 .prompt {
   color: #d3d3d3;
 }

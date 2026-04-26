@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TSCPP Terminal</title>
+    <title>TSCPP Help</title>
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
@@ -15,20 +15,20 @@
             <span class="knob"></span>
             <span class="knob"></span>
           </div>
-          <div class="title-text">TSCPP - Terminal</div>
+          <div class="title-text">TSCPP - Help</div>
         </div>
         <div class="terminal-screen">
           <div class="scanlines"></div>
           <div class="terminal-content">
-            <div class="line typing prompt">TSCPP@server:~$ <span class="green-text">connect</span></div>
-            <div class="line typing">Connecting to TSCPP Discord...</div>
-            <div class="line typing">Server status: <span class="status">ONLINE</span></div>
-            <div class="line typing">Members: <strong>ERROR</strong></div>
-            <div class="line typing">Channels: <strong>TERMINAL</strong></div>
-            <div class="line typing">Theme: <span class="status">GREY</span></div>
-            <div class="line typing">Last sync: <span class="timestamp">2026-04-26 18:42:11</span></div>
-            <div class="line typing">Type <span class="green-text">help</span> for commands.</div>
-            <div class="line prompt input-line">TSCPP@server:~$ <input id="commandInput" autocomplete="off" spellcheck="false" /></div>
+            <div class="line typing">TSCPP Help Page</div>
+            <div class="line typing">This page is your command guide for the TSCPP website.</div>
+            <div class="line typing">help - open this help page from the main terminal.</div>
+            <div class="line typing">page2 - also opens this help page from the main terminal.</div>
+            <div class="line typing">home - return to the main page from here.</div>
+            <div class="line typing">Use commands in lowercase or uppercase; both work the same.</div>
+            <div class="line typing">Want to change this text? Edit <span class="green-text">page2.html</span> and replace these lines.</div>
+            <div class="line typing">You can add server rules, Discord info, or any instructions you want visitors to see.</div>
+            <div class="line prompt input-line">TSCPP@help:~$ <input id="commandInput" autocomplete="off" spellcheck="false" /></div>
           </div>
         </div>
       </div>
@@ -94,20 +94,14 @@
           const normalized = command.trim().toLowerCase();
           if (!normalized) return;
 
-          if (normalized === 'help') {
-            appendOutput('Opening help page...', 'typing active');
-            setTimeout(() => window.location.href = 'page2.html', 600);
-            return;
-          }
-
-          if (normalized === 'page2' || normalized === 'goto page2' || normalized === 'open page2') {
-            appendOutput('Opening help page...', 'typing active');
-            setTimeout(() => window.location.href = 'page2.html', 600);
-            return;
-          }
-
           if (normalized === 'home' || normalized === 'index') {
-            appendOutput('Already on the home page.', 'typing active');
+            appendOutput('Returning to index.html...', 'typing active');
+            setTimeout(() => window.location.href = 'index.html', 600);
+            return;
+          }
+
+          if (normalized === 'help') {
+            appendOutput('Available commands: help, home', 'typing active');
             return;
           }
 
@@ -119,7 +113,7 @@
           if (event.key === 'Enter') {
             event.preventDefault();
             const command = commandInput.value;
-            appendOutput(`TSCPP@server:~$ ${command}`, 'prompt');
+            appendOutput(`TSCPP@page2:~$ ${command}`, 'prompt');
             commandInput.value = '';
             handleCommand(command);
           }
