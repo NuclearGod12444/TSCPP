@@ -108,11 +108,12 @@ body::before {
 
 .line.typing {
   opacity: 0;
+  visibility: hidden;
 }
 
 .line.typing.active {
   opacity: 1;
-  transition: opacity 0.18s ease;
+  visibility: visible;
 }
 
 .prompt {
@@ -148,17 +149,6 @@ body::before {
 @keyframes blink {
   0%, 49% { opacity: 1; }
   50%, 100% { opacity: 0; }
-}
-
-@keyframes lineReveal {
-  from {
-    opacity: 0;
-    transform: translateY(10px) scaleY(0.98);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scaleY(1);
-  }
 }
 
 @keyframes glow {
