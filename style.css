@@ -188,6 +188,15 @@ body.theme-red .terminal-screen {
   line-height: 1.55;
 }
 
+.timer-line {
+  color: #facc15;
+  font-weight: 700;
+}
+
+#timeoutTimer {
+  color: #fff3bf;
+}
+
 .line.typing {
   opacity: 0;
   visibility: hidden;

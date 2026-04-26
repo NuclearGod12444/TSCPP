@@ -30,6 +30,91 @@ function handleDisabledCommand(normalized, appendOutput) {
   return true;
 }
 
+const SESSION_TIMEOUT_MS = 20 * 60 * 1000;
+const SESSION_TIMEOUT_SECONDS = 20 * 60;
+let sessionTimeoutId = null;
+let countdownIntervalId = null;
+let sessionLocked = false;
+let remainingSeconds = SESSION_TIMEOUT_SECONDS;
+const TIMEOUT_MESSAGE = 'Session timed out due to inactivity. Type connect to unlock the terminal.';
+
+function formatTime(seconds) {
+  const minutes = Math.floor(seconds / 60).toString().padStart(2, '0');
+  const secs = (seconds % 60).toString().padStart(2, '0');
+  return `${minutes}:${secs}`;
+}
+
+function updateTimeoutDisplay() {
+  const timerEl = document.getElementById('timeoutTimer');
+  if (!timerEl) return;
+  timerEl.textContent = sessionLocked ? 'LOCKED' : formatTime(remainingSeconds);
+}
+
+function clearSessionTimers() {
+  clearTimeout(sessionTimeoutId);
+  clearInterval(countdownIntervalId);
+}
+
+function resetSessionTimeout(appendOutput) {
+  if (sessionLocked) return;
+  clearSessionTimers();
+  remainingSeconds = SESSION_TIMEOUT_SECONDS;
+  updateTimeoutDisplay();
+
+  countdownIntervalId = window.setInterval(() => {
+    if (sessionLocked) return;
+    remainingSeconds -= 1;
+    if (remainingSeconds <= 0) {
+      remainingSeconds = 0;
+      sessionLocked = true;
+      updateTimeoutDisplay();
+      appendOutput(TIMEOUT_MESSAGE, 'typing active');
+      clearSessionTimers();
+      return;
+    }
+    updateTimeoutDisplay();
+  }, 1000);
+
+  sessionTimeoutId = window.setTimeout(() => {
+    sessionLocked = true;
+    remainingSeconds = 0;
+    updateTimeoutDisplay();
+    appendOutput(TIMEOUT_MESSAGE, 'typing active');
+    clearSessionTimers();
+  }, SESSION_TIMEOUT_MS);
+}
+
+function initializeSessionTimeout(commandInput, appendOutput) {
+  sessionLocked = false;
+  resetSessionTimeout(appendOutput);
+  commandInput.addEventListener('keydown', () => {
+    if (!sessionLocked) {
+      resetSessionTimeout(appendOutput);
+    }
+  });
+}
+
+function handleSessionCommand(normalized, appendOutput) {
+  if (normalized === 'connect') {
+    if (sessionLocked) {
+      sessionLocked = false;
+      resetSessionTimeout(appendOutput);
+      appendOutput('Terminal unlocked. Session resumed.', 'typing active');
+      return true;
+    }
+
+    appendOutput('Terminal already connected.', 'typing active');
+    return true;
+  }
+
+  if (sessionLocked) {
+    appendOutput(TIMEOUT_MESSAGE, 'typing active');
+    return true;
+  }
+
+  return false;
+}
+
 function applyTerminalTheme(themeName) {
   const validTheme = terminalThemes[themeName] ? themeName : 'grey';
   document.body.classList.remove('theme-grey', 'theme-blue', 'theme-green', 'theme-red');

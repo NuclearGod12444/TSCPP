@@ -20,6 +20,7 @@
         <div class="terminal-screen">
           <div class="scanlines"></div>
           <div class="terminal-content">
+            <div class="line timer-line">Timeout in: <span id="timeoutTimer">20:00</span></div>
             <div class="line typing">TSCPP Help Page</div>
             <div class="line typing">This page lists the commands you can use in the TSCPP terminal.</div>
             <div class="line typing">[Commands]</div>
@@ -32,6 +33,7 @@
             <div class="line typing">theme blue / blue - set the terminal theme to blue.</div>
             <div class="line typing">theme green / green - set the terminal theme to green.</div>
             <div class="line typing">theme red / red - set the terminal theme to red.</div>
+            <div class="line typing">connect - unlock the terminal after timeout.</div>
             <div class="line typing">beta - reserved command.</div>
             <div class="line typing">rules - open the Rules page.</div>
             <div class="line typing">discord - open the Discord info page.</div>
@@ -108,6 +110,8 @@
           const normalized = command.trim().toLowerCase();
           if (!normalized) return;
 
+          if (handleSessionCommand(normalized, appendOutput)) return;
+
           const disabled = disabledCommands[normalized];
           if (disabled) {
             appendOutput(`Command ${normalized} is temporarily unavailable [${disabled.code}] - ${disabled.reason}.`, 'typing active');
@@ -123,7 +127,7 @@
           }
 
           if (normalized === 'help' || normalized === 'commands') {
-            appendOutput('Commands: help, page2, info, about, information, errorcodes, errors, status, theme, theme grey, theme blue, theme green, theme red, beta, home, commands, rules, discord', 'typing active');
+            appendOutput('Commands: help, page2, info, about, information, errorcodes, errors, status, theme, theme grey, theme blue, theme green, theme red, connect, beta, home, commands, rules, discord', 'typing active');
             return;
           }
 
@@ -175,6 +179,8 @@
             handleCommand(command);
           }
         });
+
+        initializeSessionTimeout(commandInput, appendOutput);
 
         (async () => {
           for (let i = 0; i < typingLines.length; i++) {

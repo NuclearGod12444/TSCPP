@@ -20,6 +20,7 @@
         <div class="terminal-screen">
           <div class="scanlines"></div>
           <div class="terminal-content">
+            <div class="line timer-line">Timeout in: <span id="timeoutTimer">20:00</span></div>
             <div class="line typing">About TSCPP</div>
             <div class="line typing">TSCPP is a learning and programming community for Discord users.</div>
             <div class="line typing">This page explains what TSCPP is about and where to find help.</div>
@@ -93,6 +94,8 @@
           const normalized = command.trim().toLowerCase();
           if (!normalized) return;
 
+          if (handleSessionCommand(normalized, appendOutput)) return;
+
           const disabled = disabledCommands[normalized];
           if (disabled) {
             appendOutput(`Command ${normalized} is temporarily unavailable [${disabled.code}] - ${disabled.reason}.`, 'typing active');
@@ -149,6 +152,8 @@
             handleCommand(command);
           }
         });
+
+        initializeSessionTimeout(commandInput, appendOutput);
 
         (async () => {
           for (let i = 0; i < typingLines.length; i++) {

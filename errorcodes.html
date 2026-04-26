@@ -20,6 +20,7 @@
         <div class="terminal-screen">
           <div class="scanlines"></div>
           <div class="terminal-content">
+            <div class="line timer-line">Timeout in: <span id="timeoutTimer">20:00</span></div>
             <div class="line typing">TSCPP Error Codes</div>
             <div class="line typing">E001 - "INVALID_COMMAND" - The command entered was not recognized.</div>
             <div class="line typing">E002 - "PAGE_NOT_FOUND" - The requested page does not exist yet.</div>
@@ -102,6 +103,8 @@
           const normalized = command.trim().toLowerCase();
           if (!normalized) return;
 
+          if (handleSessionCommand(normalized, appendOutput)) return;
+
           const disabled = disabledCommands[normalized];
           if (disabled) {
             appendOutput(`Command ${normalized} is temporarily unavailable [${disabled.code}] - ${disabled.reason}.`, 'typing active');
@@ -158,6 +161,8 @@
             handleCommand(command);
           }
         });
+
+        initializeSessionTimeout(commandInput, appendOutput);
 
         (async () => {
           for (let i = 0; i < typingLines.length; i++) {

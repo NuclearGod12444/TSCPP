@@ -20,6 +20,7 @@
         <div class="terminal-screen">
           <div class="scanlines"></div>
           <div class="terminal-content">
+            <div class="line timer-line">Timeout in: <span id="timeoutTimer">20:00</span></div>
             <div class="line typing">TSCPP Status Dashboard</div>
             <div class="line typing">Service status overview for TSCPP systems and Discord connectivity.</div>
             <div class="line typing">- Discord Server: <span class="status online">ONLINE</span></div>
@@ -96,6 +97,8 @@
           const normalized = command.trim().toLowerCase();
           if (!normalized) return;
 
+          if (handleSessionCommand(normalized, appendOutput)) return;
+
           const disabled = disabledCommands[normalized];
           if (disabled) {
             appendOutput(`Command ${normalized} is temporarily unavailable [${disabled.code}] - ${disabled.reason}.`, 'typing active');
@@ -146,6 +149,8 @@
             handleCommand(command);
           }
         });
+
+        initializeSessionTimeout(commandInput, appendOutput);
 
         (async () => {
           for (let i = 0; i < typingLines.length; i++) {
