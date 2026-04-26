@@ -15,23 +15,78 @@
             <span class="knob"></span>
             <span class="knob"></span>
           </div>
-          <div class="title-text">TSCPP - DISCORD SERVER</div>
+          <div class="title-text">TSCPP - Terminal</div>
         </div>
         <div class="terminal-screen">
           <div class="scanlines"></div>
           <div class="terminal-content">
-            <div class="line prompt">TSCPP@server:~$ <span class="green-text">connect</span></div>
-            <div class="line">Connecting to TSCPP Discord...</div>
-            <div class="line">Server status: <span class="status">ONLINE</span></div>
-            <div class="line">Members: <strong>245</strong></div>
-            <div class="line">Channels: <strong>General • Dev • Bot • Announcements</strong></div>
-            <div class="line">Theme: <span class="status">GREY TERMINAL MODE</span></div>
-            <div class="line">Last sync: <span class="timestamp">2026-04-26 18:42:11</span></div>
-            <div class="line">Type <span class="green-text">help</span> for commands.</div>
+            <div class="line typing prompt">TSCPP@server:~$ <span class="green-text">connect</span></div>
+            <div class="line typing">Connecting to TSCPP Discord...</div>
+            <div class="line typing">Server status: <span class="status">ONLINE</span></div>
+            <div class="line typing">Members: <strong>245</strong></div>
+            <div class="line typing">Channels: <strong>General • Dev • Bot • Announcements</strong></div>
+            <div class="line typing">Theme: <span class="status">GREY TERMINAL MODE</span></div>
+            <div class="line typing">Last sync: <span class="timestamp">2026-04-26 18:42:11</span></div>
+            <div class="line typing">Type <span class="green-text">help</span> for commands.</div>
             <div class="line prompt">TSCPP@server:~$ <span class="cursor">█</span></div>
           </div>
         </div>
       </div>
     </div>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const typingLines = Array.from(document.querySelectorAll('.terminal-content .line.typing'));
+
+        function wait(ms) {
+          return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        function cloneStructure(sourceNode, targetTextNodes) {
+          if (sourceNode.nodeType === Node.TEXT_NODE) {
+            const textNode = document.createTextNode('');
+            targetTextNodes.push({ source: sourceNode.nodeValue, target: textNode });
+            return textNode;
+          }
+
+          const clone = document.createElement(sourceNode.tagName);
+          for (const attr of sourceNode.attributes) {
+            clone.setAttribute(attr.name, attr.value);
+          }
+
+          sourceNode.childNodes.forEach(child => clone.appendChild(cloneStructure(child, targetTextNodes)));
+          return clone;
+        }
+
+        async function typeLine(line, lineIndex) {
+          const originalHtml = line.innerHTML;
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(`<div>${originalHtml}</div>`, 'text/html');
+          const sourceRoot = doc.body.firstElementChild;
+
+          const targetTextNodes = [];
+          line.innerHTML = '';
+          const fragment = document.createDocumentFragment();
+          fragment.appendChild(cloneStructure(sourceRoot, targetTextNodes));
+          line.appendChild(fragment);
+          line.classList.add('active');
+
+          await wait(lineIndex === 0 ? 300 : 120);
+
+          for (const { source, target } of targetTextNodes) {
+            for (let i = 0; i < source.length; i++) {
+              target.nodeValue += source[i];
+              const charDelay = 16 + Math.random() * 30;
+              await wait(charDelay);
+            }
+          }
+        }
+
+        (async () => {
+          for (let i = 0; i < typingLines.length; i++) {
+            await typeLine(typingLines[i], i);
+          }
+        })();
+      });
+    </script>
   </body>
 </html>
