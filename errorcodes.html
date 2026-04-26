@@ -34,12 +34,13 @@
             <div class="line typing">CRITICAL - A significant issue was detected, and the system may be impacted.</div>
             <div class="line typing">ERROR - Complete system failure.</div>
             <div class="line typing">For more details, ask a staff member or check the help page.</div>
-            <div class="line typing">Commands from here: home, help, status</div>
+            <div class="line typing">to see the list of commands for the terminal, type 'help' to see the full list</div>
             <div class="line prompt input-line">TSCPP@errors:~$ <input id="commandInput" autocomplete="off" spellcheck="false" /></div>
           </div>
         </div>
       </div>
     </div>
+    <script src="terminal-common.js"></script>
     <script>
       document.addEventListener('DOMContentLoaded', () => {
         const typingLines = Array.from(document.querySelectorAll('.terminal-content .line.typing'));
@@ -101,6 +102,14 @@
           const normalized = command.trim().toLowerCase();
           if (!normalized) return;
 
+          const disabled = disabledCommands[normalized];
+          if (disabled) {
+            appendOutput(`Command ${normalized} is temporarily unavailable [${disabled.code}] - ${disabled.reason}.`, 'typing active');
+            return;
+          }
+
+          if (handleThemeCommand(normalized, appendOutput)) return;
+
           if (normalized === 'home' || normalized === 'index') {
             appendOutput('Returning to index.html...', 'typing active');
             setTimeout(() => window.location.href = 'index.html', 600);
@@ -122,6 +131,11 @@
           if (normalized === 'rules' || normalized === 'open rules') {
             appendOutput('Opening Rules page...', 'typing active');
             setTimeout(() => window.location.href = 'rules.html', 600);
+            return;
+          }
+
+          if (normalized === 'beta') {
+            appendOutput('Beta command active.', 'typing active');
             return;
           }
 

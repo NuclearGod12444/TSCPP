@@ -25,12 +25,13 @@
             <div class="line typing">This page explains what TSCPP is about and where to find help.</div>
             <div class="line typing">If you see an error code in the site, open the error codes page to get the meaning.</div>
             <div class="line typing">Use the errorcodes page for explanations of common site errors.</div>
-            <div class="line typing">Commands you can use here: home, help, status</div>
+            <div class="line typing">to see the list of commands for the terminal, type 'help' to see the full list</div>
             <div class="line prompt input-line">TSCPP@about:~$ <input id="commandInput" autocomplete="off" spellcheck="false" /></div>
           </div>
         </div>
       </div>
     </div>
+    <script src="terminal-common.js"></script>
     <script>
       document.addEventListener('DOMContentLoaded', () => {
         const typingLines = Array.from(document.querySelectorAll('.terminal-content .line.typing'));
@@ -92,6 +93,14 @@
           const normalized = command.trim().toLowerCase();
           if (!normalized) return;
 
+          const disabled = disabledCommands[normalized];
+          if (disabled) {
+            appendOutput(`Command ${normalized} is temporarily unavailable [${disabled.code}] - ${disabled.reason}.`, 'typing active');
+            return;
+          }
+
+          if (handleThemeCommand(normalized, appendOutput)) return;
+
           if (normalized === 'home' || normalized === 'index') {
             appendOutput('Returning to index.html...', 'typing active');
             setTimeout(() => window.location.href = 'index.html', 600);
@@ -107,6 +116,11 @@
           if (normalized === 'status') {
             appendOutput('Opening Status page...', 'typing active');
             setTimeout(() => window.location.href = 'status.html', 600);
+            return;
+          }
+
+          if (normalized === 'beta') {
+            appendOutput('Beta command active.', 'typing active');
             return;
           }
 

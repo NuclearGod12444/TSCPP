@@ -33,6 +33,7 @@
         </div>
       </div>
     </div>
+    <script src="terminal-common.js"></script>
     <script>
       document.addEventListener('DOMContentLoaded', () => {
         const typingLines = Array.from(document.querySelectorAll('.terminal-content .line.typing'));
@@ -123,6 +124,14 @@
           const normalized = command.trim().toLowerCase();
           if (!normalized) return;
 
+          const disabled = disabledCommands[normalized];
+          if (disabled) {
+            appendOutput(`Command ${normalized} is temporarily unavailable [${disabled.code}] - ${disabled.reason}.`, 'typing active');
+            return;
+          }
+
+          if (handleThemeCommand(normalized, appendOutput)) return;
+
           if (normalized === 'help') {
             appendOutput('Opening help page...', 'typing active');
             setTimeout(() => window.location.href = 'page2.html', 600);
@@ -144,6 +153,11 @@
           if (normalized === 'status' || normalized === 'open status') {
             appendOutput('Opening Status page...', 'typing active');
             setTimeout(() => window.location.href = 'status.html', 600);
+            return;
+          }
+
+          if (normalized === 'beta') {
+            appendOutput('Beta command active.', 'typing active');
             return;
           }
 

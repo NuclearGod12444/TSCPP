@@ -28,12 +28,13 @@
             <div class="line typing">- Invite link health: <span class="status online">ONLINE</span></div>
             <div class="line typing">Last update: <span class="timestamp">2026-04-26 18:42:11</span></div>
             <div class="line typing">Note: This page shows the current demo status snapshot.</div>
-            <div class="line typing">Commands you can use here: home, help, discord, errorcodes</div>
+            <div class="line typing">to see the list of commands for the terminal, type 'help' to see the full list</div>
             <div class="line prompt input-line">TSCPP@status:~$ <input id="commandInput" autocomplete="off" spellcheck="false" /></div>
           </div>
         </div>
       </div>
     </div>
+    <script src="terminal-common.js"></script>
     <script>
       document.addEventListener('DOMContentLoaded', () => {
         const typingLines = Array.from(document.querySelectorAll('.terminal-content .line.typing'));
@@ -95,6 +96,14 @@
           const normalized = command.trim().toLowerCase();
           if (!normalized) return;
 
+          const disabled = disabledCommands[normalized];
+          if (disabled) {
+            appendOutput(`Command ${normalized} is temporarily unavailable [${disabled.code}] - ${disabled.reason}.`, 'typing active');
+            return;
+          }
+
+          if (handleThemeCommand(normalized, appendOutput)) return;
+
           if (normalized === 'home' || normalized === 'index') {
             appendOutput('Returning to index.html...', 'typing active');
             setTimeout(() => window.location.href = 'index.html', 600);
@@ -104,6 +113,11 @@
           if (normalized === 'help') {
             appendOutput('Opening help page...', 'typing active');
             setTimeout(() => window.location.href = 'page2.html', 600);
+            return;
+          }
+
+          if (normalized === 'beta') {
+            appendOutput('Beta command active.', 'typing active');
             return;
           }
 

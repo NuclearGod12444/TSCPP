@@ -23,17 +23,20 @@
             <div class="line typing">TSCPP Discord Info</div>
             <div class="line typing">Join our Discord at: <span class="green-text">https://discord.gg/hAramjbQXK</span></div>
             <div class="line typing">Main channels:</div>
-            <div class="line typing">- general - chat and community</div>
-            <div class="line typing">- dev - coding help and collaboration</div>
-            <div class="line typing">- bot - bot commands and support</div>
-            <div class="line typing">- announcements - server updates and events</div>
-            <div class="line typing">Need help on Discord? Ping a staff member or ask in support channels.</div>
-            <div class="line typing">Commands you can use here: home, help, status, rules, errorcodes</div>
+            <div class="line typing">- containment protocals - the rules channel</div>
+            <div class="line typing">- foundation directives - the announcements channel</div>
+            <div class="line typing">- personnel intake - the lobby which contains the user entry and exit points</div>
+            <div class="line typing">- clearance assignment - the channel for managing user clearances, such as verification to gain the main roles</div>
+            <div class="line typing">- orientation guide - the FAQ channel, aka Frequently Asked Questions, it also contains helpful information</div>
+            <div class="line typing">the rest is classified, and requires you to be in the server and obtain roles to view them</div>
+            <div class="line typing">if you need assistance, you may ask in the technical support channel</div>
+            <div class="line typing">to see the list of commands for the terminal, type 'help' to see the full list</div>
             <div class="line prompt input-line">TSCPP@discord:~$ <input id="commandInput" autocomplete="off" spellcheck="false" /></div>
           </div>
         </div>
       </div>
     </div>
+    <script src="terminal-common.js"></script>
     <script>
       document.addEventListener('DOMContentLoaded', () => {
         const typingLines = Array.from(document.querySelectorAll('.terminal-content .line.typing'));
@@ -94,6 +97,14 @@
           const normalized = command.trim().toLowerCase();
           if (!normalized) return;
 
+          const disabled = disabledCommands[normalized];
+          if (disabled) {
+            appendOutput(`Command ${normalized} is temporarily unavailable [${disabled.code}] - ${disabled.reason}.`, 'typing active');
+            return;
+          }
+
+          if (handleThemeCommand(normalized, appendOutput)) return;
+
           if (normalized === 'home' || normalized === 'index') {
             appendOutput('Returning to index.html...', 'typing active');
             setTimeout(() => window.location.href = 'index.html', 600);
@@ -109,6 +120,11 @@
           if (normalized === 'status') {
             appendOutput('Opening Status page...', 'typing active');
             setTimeout(() => window.location.href = 'status.html', 600);
+            return;
+          }
+
+          if (normalized === 'beta') {
+            appendOutput('Beta command active.', 'typing active');
             return;
           }
 

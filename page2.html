@@ -28,6 +28,11 @@
             <div class="line typing">info/information/about - open the About TSCPP page.</div>
             <div class="line typing">errorcodes/errors - open the Error Codes page.</div>
             <div class="line typing">status - open the Status page.</div>
+            <div class="line typing">theme grey / grey - set the terminal theme to grey.</div>
+            <div class="line typing">theme blue / blue - set the terminal theme to blue.</div>
+            <div class="line typing">theme green / green - set the terminal theme to green.</div>
+            <div class="line typing">theme red / red - set the terminal theme to red.</div>
+            <div class="line typing">beta - reserved command.</div>
             <div class="line typing">rules - open the Rules page.</div>
             <div class="line typing">discord - open the Discord info page.</div>
             <div class="line typing">home - return to the main page from here.</div>
@@ -41,6 +46,7 @@
         </div>
       </div>
     </div>
+    <script src="terminal-common.js"></script>
     <script>
       document.addEventListener('DOMContentLoaded', () => {
         const typingLines = Array.from(document.querySelectorAll('.terminal-content .line.typing'));
@@ -102,6 +108,14 @@
           const normalized = command.trim().toLowerCase();
           if (!normalized) return;
 
+          const disabled = disabledCommands[normalized];
+          if (disabled) {
+            appendOutput(`Command ${normalized} is temporarily unavailable [${disabled.code}] - ${disabled.reason}.`, 'typing active');
+            return;
+          }
+
+          if (handleThemeCommand(normalized, appendOutput)) return;
+
           if (normalized === 'home' || normalized === 'index') {
             appendOutput('Returning to index.html...', 'typing active');
             setTimeout(() => window.location.href = 'index.html', 600);
@@ -109,13 +123,18 @@
           }
 
           if (normalized === 'help' || normalized === 'commands') {
-            appendOutput('Commands: help, page2, info, about, information, errorcodes, errors, status, home, commands, rules, discord', 'typing active');
+            appendOutput('Commands: help, page2, info, about, information, errorcodes, errors, status, theme, theme grey, theme blue, theme green, theme red, beta, home, commands, rules, discord', 'typing active');
             return;
           }
 
           if (normalized === 'status') {
             appendOutput('Opening Status page...', 'typing active');
             setTimeout(() => window.location.href = 'status.html', 600);
+            return;
+          }
+
+          if (normalized === 'beta') {
+            appendOutput('Beta command active.', 'typing active');
             return;
           }
 
