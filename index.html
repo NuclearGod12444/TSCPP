@@ -23,7 +23,7 @@
             <div class="line typing prompt">TSCPP@server:~$ <span class="green-text">connect</span></div>
             <div class="line typing">Connecting to TSCPP Discord...</div>
             <div class="line typing">Server status: <span class="status">ONLINE</span></div>
-            <div class="line typing">Members: <strong>ERROR</strong></div>
+            <div class="line typing">Members: <strong id="memberCount">Loading...</strong></div>
             <div class="line typing">Channels: <strong>TERMINAL</strong></div>
             <div class="line typing">Theme: <span class="status">GREY</span></div>
             <div class="line typing">Last sync: <span class="timestamp">2026-04-26 18:42:11</span></div>
@@ -37,6 +37,35 @@
       document.addEventListener('DOMContentLoaded', () => {
         const typingLines = Array.from(document.querySelectorAll('.terminal-content .line.typing'));
         const commandInput = document.getElementById('commandInput');
+        const memberCountTarget = document.getElementById('memberCount');
+
+        // for member counter
+        const discordGuildId = '1492600121668534553';
+        async function fetchDiscordMemberCount() {
+          if (!memberCountTarget) return;
+          if (!discordGuildId || discordGuildId === '1492600121668534553') {
+            memberCountTarget.textContent = 'UNAVAILABLE';
+            return;
+          }
+
+          try {
+            const response = await fetch(`https://discord.com/api/guilds/1492600121668534553/widget.json`);
+            if (!response.ok) throw new Error('Discord widget unavailable');
+            const data = await response.json();
+            if (data && Array.isArray(data.members)) {
+              memberCountTarget.textContent = data.members.length;
+            } else if (data && typeof data.presence_count === 'number') {
+              memberCountTarget.textContent = data.presence_count;
+            } else {
+              memberCountTarget.textContent = 'UNAVAILABLE';
+            }
+          } catch (error) {
+            console.warn('Discord member count fetch failed:', error);
+            memberCountTarget.textContent = 'UNAVAILABLE';
+          }
+        }
+
+        fetchDiscordMemberCount();
 
         function wait(ms) {
           return new Promise(resolve => setTimeout(resolve, ms));
