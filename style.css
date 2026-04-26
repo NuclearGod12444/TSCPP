@@ -1,0 +1,170 @@
+/* TSCPP Terminal Style */
+:root {
+  color-scheme: dark;
+  font-family: 'IBM Plex Mono', 'Courier New', Courier, monospace;
+  background: #0b0c10;
+  color: #d3d3d3;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  display: grid;
+  place-items: center;
+  background: radial-gradient(circle at top, #2a2d35 0%, #101214 55%, #060708 100%);
+  overflow: hidden;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(0,0,0,0.15));
+  pointer-events: none;
+}
+
+.terminal-shell {
+  width: min(100%, 930px);
+  padding: 24px;
+}
+
+.terminal-window {
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 18px;
+  background: rgba(16, 18, 21, 0.96);
+  box-shadow: 0 36px 120px rgba(0,0,0,0.45);
+  overflow: hidden;
+  animation: glow 4s ease-in-out infinite;
+}
+
+.title-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  background: rgba(32, 34, 39, 0.95);
+  padding: 14px 20px;
+}
+
+.knobs {
+  display: flex;
+  gap: 10px;
+}
+
+.knob {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(196,196,196,0.45);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.15);
+}
+
+.title-text {
+  color: #b3b3b3;
+  font-size: 0.95rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.terminal-screen {
+  position: relative;
+  padding: 28px 24px 24px;
+  background: radial-gradient(circle at top left, rgba(200,200,200,0.04), transparent 25%),
+              linear-gradient(180deg, #141618 0%, #0d0f12 100%);
+}
+
+.scanlines {
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px);
+  background-size: 100% 6px;
+  pointer-events: none;
+  opacity: 0.35;
+}
+
+.terminal-content {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 10px;
+  color: #c6c6c6;
+  filter: drop-shadow(0 0 1px rgba(255,255,255,0.05));
+  min-height: 360px;
+}
+
+.line {
+  font-size: 0.95rem;
+  line-height: 1.55;
+}
+
+.prompt {
+  color: #d3d3d3;
+}
+
+.green-text,
+.status,
+.timestamp {
+  color: #b0b0b0;
+}
+
+.status {
+  font-weight: 600;
+}
+
+.cursor {
+  display: inline-block;
+  width: 10px;
+  animation: blink 1s steps(2, start) infinite;
+  color: #d1d1d1;
+}
+
+.terminal-window::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: rgba(255,255,255,0.02);
+  mix-blend-mode: screen;
+}
+
+@keyframes blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+@keyframes glow {
+  0%, 100% { box-shadow: 0 36px 120px rgba(0,0,0,0.45); }
+  50% { box-shadow: 0 36px 160px rgba(0,0,0,0.55); }
+}
+
+@keyframes flicker {
+  0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+    opacity: 1;
+  }
+  20%, 24%, 55% {
+    opacity: 0.85;
+  }
+}
+
+.terminal-screen {
+  animation: flicker 8s linear infinite;
+}
+
+@media (max-width: 640px) {
+  .terminal-window {
+    border-radius: 14px;
+  }
+
+  .terminal-screen {
+    padding: 20px 16px 16px;
+  }
+}
