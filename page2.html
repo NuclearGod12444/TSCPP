@@ -34,7 +34,7 @@
             <div class="line typing">theme green / green - set the terminal theme to green.</div>
             <div class="line typing">theme red / red - set the terminal theme to red.</div>
             <div class="line typing">connect - unlock the terminal after timeout.</div>
-            <div class="line typing">beta - reserved command.</div>
+            <div class="line typing">lore - opens a page with the lore of the scps and foundation.</div>
             <div class="line typing">rules - open the Rules page.</div>
             <div class="line typing">discord - open the Discord info page.</div>
             <div class="line typing">home - return to the main page from here.</div>
@@ -127,7 +127,7 @@
           }
 
           if (normalized === 'help' || normalized === 'commands') {
-            appendOutput('Commands: help, page2, info, about, information, errorcodes, errors, status, theme, theme grey, theme blue, theme green, theme red, connect, beta, home, commands, rules, discord', 'typing active');
+            appendOutput('Commands: help, page2, info, about, information, errorcodes, errors, status, theme, theme grey, theme blue, theme green, theme red, connect, lore, home, commands, rules, discord', 'typing active');
             return;
           }
 
@@ -137,8 +137,8 @@
             return;
           }
 
-          if (normalized === 'beta') {
-            appendOutput('Beta command active.', 'typing active');
+          if (normalized === 'lore') {
+            appendOutput('Lore command active.', 'typing active');
             return;
           }
 

@@ -1,6 +1,6 @@
 // Shared terminal helper utilities
 const disabledCommands = {
-  beta: {
+  lore: {
     code: 'E004',
     reason: 'this is an upcoming feature, which is currently unavailable',
   },
