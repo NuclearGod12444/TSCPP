@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TSCPP Error Codes</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="terminal-shell">
+      <div class="terminal-window">
+        <div class="title-bar">
+          <div class="knobs">
+            <span class="knob"></span>
+            <span class="knob"></span>
+            <span class="knob"></span>
+          </div>
+          <div class="title-text">TSCPP - Error Codes</div>
+        </div>
+        <div class="terminal-screen">
+          <div class="scanlines"></div>
+          <div class="terminal-content">
+            <div class="line typing">TSCPP Error Codes</div>
+            <div class="line typing">E001 - "INVALID_COMMAND" - The command entered was not recognized.</div>
+            <div class="line typing">E002 - "PAGE_NOT_FOUND" - The requested page does not exist yet.</div>
+            <div class="line typing">E003 - "MISSING_PARAMETER" - A required command parameter is missing.</div>
+            <div class="line typing">E004 - "ACCESS_DENIED" - You do not have permission to use that page or command.</div>
+            <div class="line typing">E005 - "SERVER_OFFLINE" - The Discord server or service is temporarily unavailable.</div>
+            <div class="line typing">E006 - "BAD_INPUT" - The input format is incorrect, try a different command style.</div>
+            <div class="line typing">E007 - "UNKNOWN_ERROR" - An unexpected error occurred; try again later.</div>
+            <div class="line typing">For more details, ask a staff member or check the help page.</div>
+            <div class="line typing">Commands from here: home, help</div>
+            <div class="line prompt input-line">TSCPP@errors:~$ <input id="commandInput" autocomplete="off" spellcheck="false" /></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const typingLines = Array.from(document.querySelectorAll('.terminal-content .line.typing'));
+        const commandInput = document.getElementById('commandInput');
+
+        function wait(ms) {
+          return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        function cloneStructure(sourceNode, targetTextNodes) {
+          if (sourceNode.nodeType === Node.TEXT_NODE) {
+            const textNode = document.createTextNode('');
+            targetTextNodes.push({ source: sourceNode.nodeValue, target: textNode });
+            return textNode;
+          }
+
+          const clone = document.createElement(sourceNode.tagName);
+          for (const attr of sourceNode.attributes) {
+            clone.setAttribute(attr.name, attr.value);
+          }
+
+          sourceNode.childNodes.forEach(child => clone.appendChild(cloneStructure(child, targetTextNodes)));
+          return clone;
+        }
+
+        async function typeLine(line, lineIndex) {
+          const originalHtml = line.innerHTML;
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(`<div>${originalHtml}</div>`, 'text/html');
+          const sourceRoot = doc.body.firstElementChild;
+
+          const targetTextNodes = [];
+          line.innerHTML = '';
+          const fragment = document.createDocumentFragment();
+          fragment.appendChild(cloneStructure(sourceRoot, targetTextNodes));
+          line.appendChild(fragment);
+          line.classList.add('active');
+
+          await wait(lineIndex === 0 ? 300 : 120);
+
+          for (const { source, target } of targetTextNodes) {
+            for (let i = 0; i < source.length; i++) {
+              target.nodeValue += source[i];
+              const charDelay = 16 + Math.random() * 30;
+              await wait(charDelay);
+            }
+          }
+        }
+
+        function appendOutput(text, cssClass = '') {
+          const line = document.createElement('div');
+          line.className = `line ${cssClass}`.trim();
+          line.textContent = text;
+          commandInput.closest('.terminal-content').insertBefore(line, commandInput.parentElement);
+          line.scrollIntoView({ behavior: 'smooth', block: 'end' });
+        }
+
+        function handleCommand(command) {
+          const normalized = command.trim().toLowerCase();
+          if (!normalized) return;
+
+          if (normalized === 'home' || normalized === 'index') {
+            appendOutput('Returning to index.html...', 'typing active');
+            setTimeout(() => window.location.href = 'index.html', 600);
+            return;
+          }
+
+          if (normalized === 'help') {
+            appendOutput('Opening help page...', 'typing active');
+            setTimeout(() => window.location.href = 'page2.html', 600);
+            return;
+          }
+
+          if (normalized === 'rules' || normalized === 'open rules') {
+            appendOutput('Opening Rules page...', 'typing active');
+            setTimeout(() => window.location.href = 'rules.html', 600);
+            return;
+          }
+
+          if (normalized === 'discord' || normalized === 'open discord') {
+            appendOutput('Opening Discord page...', 'typing active');
+            setTimeout(() => window.location.href = 'discord.html', 600);
+            return;
+          }
+
+          appendOutput(`Command not found: ${command} [E001] - invalid command. Type errorcodes for details.`, 'typing active');
+        }
+
+        commandInput.focus();
+        commandInput.addEventListener('keydown', (event) => {
+          if (event.key === 'Enter') {
+            event.preventDefault();
+            const command = commandInput.value;
+            appendOutput(`TSCPP@errors:~$ ${command}`, 'prompt');
+            commandInput.value = '';
+            handleCommand(command);
+          }
+        });
+
+        (async () => {
+          for (let i = 0; i < typingLines.length; i++) {
+            await typeLine(typingLines[i], i);
+          }
+          commandInput.focus();
+        })();
+      });
+    </script>
+  </body>
+</html>

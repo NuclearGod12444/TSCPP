@@ -21,13 +21,20 @@
           <div class="scanlines"></div>
           <div class="terminal-content">
             <div class="line typing">TSCPP Help Page</div>
-            <div class="line typing">This page is your command guide for the TSCPP website.</div>
+            <div class="line typing">This page lists the commands you can use in the TSCPP terminal.</div>
+            <div class="line typing">[Commands]</div>
             <div class="line typing">help - open this help page from the main terminal.</div>
             <div class="line typing">page2 - also opens this help page from the main terminal.</div>
+            <div class="line typing">info/information/about - open the About TSCPP page.</div>
+            <div class="line typing">errorcodes/errors - open the Error Codes page.</div>
+            <div class="line typing">rules - open the Rules page.</div>
+            <div class="line typing">discord - open the Discord info page.</div>
             <div class="line typing">home - return to the main page from here.</div>
-            <div class="line typing">Use commands in lowercase or uppercase; both work the same.</div>
-            <div class="line typing">Want to change this text? Edit <span class="green-text">page2.html</span> and replace these lines.</div>
-            <div class="line typing">You can add server rules, Discord info, or any instructions you want visitors to see.</div>
+            <div class="line typing">commands - show the commands section again.</div>
+            <div class="line typing">[Notes]</div>
+            <div class="line typing">Use lowercase or uppercase commands; both work the same.</div>
+            <div class="line typing">If you get an invalid command, type errorcodes for the error reference page.</div>
+            <div class="line typing">For server-specific help, open the Rules or Discord pages.</div>
             <div class="line prompt input-line">TSCPP@help:~$ <input id="commandInput" autocomplete="off" spellcheck="false" /></div>
           </div>
         </div>
@@ -100,12 +107,36 @@
             return;
           }
 
-          if (normalized === 'help') {
-            appendOutput('Available commands: help, home', 'typing active');
+          if (normalized === 'help' || normalized === 'commands') {
+            appendOutput('Commands: help, page2, info, about, information, errorcodes, errors, home, commands, rules, discord', 'typing active');
             return;
           }
 
-          appendOutput(`Command not found: ${command}`, 'typing active');
+          if (normalized === 'rules') {
+            appendOutput('Opening Rules page...', 'typing active');
+            setTimeout(() => window.location.href = 'rules.html', 600);
+            return;
+          }
+
+          if (normalized === 'discord') {
+            appendOutput('Opening Discord page...', 'typing active');
+            setTimeout(() => window.location.href = 'discord.html', 600);
+            return;
+          }
+
+          if (normalized === 'info' || normalized === 'about' || normalized === 'information') {
+            appendOutput('Opening About TSCPP page...', 'typing active');
+            setTimeout(() => window.location.href = 'information.html', 600);
+            return;
+          }
+
+          if (normalized === 'errorcodes' || normalized === 'errors') {
+            appendOutput('Opening error codes page...', 'typing active');
+            setTimeout(() => window.location.href = 'errorcodes.html', 600);
+            return;
+          }
+
+          appendOutput(`Command not found: ${command} [E001] - invalid command. Type errorcodes for details.`, 'typing active');
         }
 
         commandInput.focus();

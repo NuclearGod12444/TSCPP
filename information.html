@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TSCPP About</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="terminal-shell">
+      <div class="terminal-window">
+        <div class="title-bar">
+          <div class="knobs">
+            <span class="knob"></span>
+            <span class="knob"></span>
+            <span class="knob"></span>
+          </div>
+          <div class="title-text">TSCPP - About</div>
+        </div>
+        <div class="terminal-screen">
+          <div class="scanlines"></div>
+          <div class="terminal-content">
+            <div class="line typing">About TSCPP</div>
+            <div class="line typing">TSCPP is a learning and programming community for Discord users.</div>
+            <div class="line typing">This page explains what TSCPP is about and where to find help.</div>
+            <div class="line typing">If you see an error code in the site, open the error codes page to get the meaning.</div>
+            <div class="line typing">Use the errorcodes page for explanations of common site errors.</div>
+            <div class="line typing">Commands you can use here: home, help</div>
+            <div class="line prompt input-line">TSCPP@about:~$ <input id="commandInput" autocomplete="off" spellcheck="false" /></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const typingLines = Array.from(document.querySelectorAll('.terminal-content .line.typing'));
+        const commandInput = document.getElementById('commandInput');
+
+        function wait(ms) {
+          return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        function cloneStructure(sourceNode, targetTextNodes) {
+          if (sourceNode.nodeType === Node.TEXT_NODE) {
+            const textNode = document.createTextNode('');
+            targetTextNodes.push({ source: sourceNode.nodeValue, target: textNode });
+            return textNode;
+          }
+
+          const clone = document.createElement(sourceNode.tagName);
+          for (const attr of sourceNode.attributes) {
+            clone.setAttribute(attr.name, attr.value);
+          }
+
+          sourceNode.childNodes.forEach(child => clone.appendChild(cloneStructure(child, targetTextNodes)));
+          return clone;
+        }
+
+        async function typeLine(line, lineIndex) {
+          const originalHtml = line.innerHTML;
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(`<div>${originalHtml}</div>`, 'text/html');
+          const sourceRoot = doc.body.firstElementChild;
+
+          const targetTextNodes = [];
+          line.innerHTML = '';
+          const fragment = document.createDocumentFragment();
+          fragment.appendChild(cloneStructure(sourceRoot, targetTextNodes));
+          line.appendChild(fragment);
+          line.classList.add('active');
+
+          await wait(lineIndex === 0 ? 300 : 120);
+
+          for (const { source, target } of targetTextNodes) {
+            for (let i = 0; i < source.length; i++) {
+              target.nodeValue += source[i];
+              const charDelay = 16 + Math.random() * 30;
+              await wait(charDelay);
+            }
+          }
+        }
+
+        function appendOutput(text, cssClass = '') {
+          const line = document.createElement('div');
+          line.className = `line ${cssClass}`.trim();
+          line.textContent = text;
+          commandInput.closest('.terminal-content').insertBefore(line, commandInput.parentElement);
+          line.scrollIntoView({ behavior: 'smooth', block: 'end' });
+        }
+
+        function handleCommand(command) {
+          const normalized = command.trim().toLowerCase();
+          if (!normalized) return;
+
+          if (normalized === 'home' || normalized === 'index') {
+            appendOutput('Returning to index.html...', 'typing active');
+            setTimeout(() => window.location.href = 'index.html', 600);
+            return;
+          }
+
+          if (normalized === 'help') {
+            appendOutput('Opening help page...', 'typing active');
+            setTimeout(() => window.location.href = 'page2.html', 600);
+            return;
+          }
+
+          if (normalized === 'rules' || normalized === 'open rules') {
+            appendOutput('Opening Rules page...', 'typing active');
+            setTimeout(() => window.location.href = 'rules.html', 600);
+            return;
+          }
+
+          if (normalized === 'discord' || normalized === 'open discord') {
+            appendOutput('Opening Discord page...', 'typing active');
+            setTimeout(() => window.location.href = 'discord.html', 600);
+            return;
+          }
+
+          appendOutput(`Command not found: ${command} [E001] - invalid command. Type errorcodes for details.`, 'typing active');
+        }
+
+        commandInput.focus();
+        commandInput.addEventListener('keydown', (event) => {
+          if (event.key === 'Enter') {
+            event.preventDefault();
+            const command = commandInput.value;
+            appendOutput(`TSCPP@about:~$ ${command}`, 'prompt');
+            commandInput.value = '';
+            handleCommand(command);
+          }
+        });
+
+        (async () => {
+          for (let i = 0; i < typingLines.length; i++) {
+            await typeLine(typingLines[i], i);
+          }
+          commandInput.focus();
+        })();
+      });
+    </script>
+  </body>
+</html>

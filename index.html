@@ -106,12 +106,36 @@
             return;
           }
 
+          if (normalized === 'info' || normalized === 'about' || normalized === 'information' || normalized === 'open information' || normalized === 'open info') {
+            appendOutput('Opening About TSCPP page...', 'typing active');
+            setTimeout(() => window.location.href = 'information.html', 600);
+            return;
+          }
+
+          if (normalized === 'discord' || normalized === 'open discord') {
+            appendOutput('Opening Discord page...', 'typing active');
+            setTimeout(() => window.location.href = 'discord.html', 600);
+            return;
+          }
+
+          if (normalized === 'rules' || normalized === 'open rules') {
+            appendOutput('Opening Rules page...', 'typing active');
+            setTimeout(() => window.location.href = 'rules.html', 600);
+            return;
+          }
+
+          if (normalized === 'errors' || normalized === 'errorcodes' || normalized === 'error codes' || normalized === 'open errors') {
+            appendOutput('Opening error codes page...', 'typing active');
+            setTimeout(() => window.location.href = 'errorcodes.html', 600);
+            return;
+          }
+
           if (normalized === 'home' || normalized === 'index') {
             appendOutput('Already on the home page.', 'typing active');
             return;
           }
 
-          appendOutput(`Command not found: ${command}`, 'typing active');
+          appendOutput(`Command not found: ${command} [E001] - invalid command. Type errorcodes for details.`, 'typing active');
         }
 
         commandInput.focus();
