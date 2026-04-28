@@ -803,6 +803,14 @@ body.theme-red .terminal-screen {
   color: #b0b0b0;
 }
 
+.warningnote {
+  color: #ffd900;
+}
+
+.warningnote2 {
+  color: rgb(255, 209, 109);
+}
+
 .status {
   font-weight: 700;
   text-shadow: 0 0 14px rgba(176, 176, 176, 0.35);
