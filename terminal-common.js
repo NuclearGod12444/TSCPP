@@ -2,15 +2,15 @@
 const disabledCommands = {
   lore: {
     code: 'E004',
-    reason: 'this is an upcoming feature, which is currently unavailable',
+    reason: 'This has not yet been finished, a page is planned to be added about SCP, TSCPP, and Terminal lore.',
   },
   "theme grey": {
     code: 'E008',
-    reason: 'failed to enable grey theme. Error code: E008',
+    reason: 'Critical Error',
   },
   grey: {
     code: 'E008',
-    reason: 'failed to enable grey theme. Error code: E008',
+    reason: 'Critical Error',
   },
   // Add disabled commands here by name.
   // Example:
