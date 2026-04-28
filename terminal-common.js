@@ -34,6 +34,32 @@ function getBootLockState() {
   return localStorage.getItem('terminalBootLocked') === 'true';
 }
 
+function initializeVintageCursor(input) {
+  const wrapper = input.closest('.input-line');
+  if (!wrapper) return;
+
+  wrapper.style.position = wrapper.style.position || 'relative';
+
+  const cursor = document.createElement('span');
+  cursor.className = 'terminal-cursor';
+  const measure = document.createElement('span');
+  measure.className = 'terminal-cursor-measure';
+  wrapper.appendChild(cursor);
+  wrapper.appendChild(measure);
+
+  function updateCursor() {
+    measure.textContent = input.value || ' ';
+    const width = measure.getBoundingClientRect().width;
+    cursor.style.left = `${width + 2}px`;
+    cursor.classList.toggle('hidden', !input.matches(':focus'));
+  }
+
+  input.addEventListener('input', updateCursor);
+  input.addEventListener('focus', updateCursor);
+  input.addEventListener('blur', updateCursor);
+  updateCursor();
+}
+
 function setBootLockState(value) {
   if (value) {
     localStorage.setItem('terminalBootLocked', 'true');

@@ -162,6 +162,7 @@
         }
 
         commandInput.focus();
+        initializeVintageCursor(commandInput);
         commandInput.addEventListener('keydown', (event) => {
           if (event.key === 'Enter') {
             event.preventDefault();

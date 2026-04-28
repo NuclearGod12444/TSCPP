@@ -237,6 +237,7 @@ body.theme-red .terminal-screen {
   display: flex;
   align-items: center;
   gap: 0.3rem;
+  position: relative;
 }
 
 .input-line input {
@@ -246,8 +247,42 @@ body.theme-red .terminal-screen {
   font: inherit;
   width: min(100%, 100%);
   outline: none;
-  caret-color: #e5e5e5;
+  caret-color: transparent;
   letter-spacing: 0.03em;
+  position: relative;
+  z-index: 1;
+}
+
+.terminal-cursor {
+  position: absolute;
+  top: 0.18rem;
+  left: 0;
+  width: 0.85ch;
+  height: 1.22em;
+  background: currentColor;
+  opacity: 0.8;
+  animation: blinkCursor 1s steps(1) infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.terminal-cursor.hidden {
+  display: none;
+}
+
+.terminal-cursor-measure {
+  position: absolute;
+  visibility: hidden;
+  height: 0;
+  overflow: hidden;
+  white-space: pre;
+  font: inherit;
+  letter-spacing: inherit;
+}
+
+@keyframes blinkCursor {
+  0%, 50% { opacity: 0.8; }
+  50.1%, 100% { opacity: 0; }
 }
 
 .input-line input::-webkit-input-placeholder {
