@@ -4,25 +4,13 @@ const disabledCommands = {
     code: 'E004',
     reason: 'this is an upcoming feature, which is currently unavailable',
   },
-  red: {
+  "theme grey": {
     code: 'E007',
-    reason: 'themes have been temporarily disabled due to a bug, they will be back soon.',
-  },
-  theme: {
-    code: 'E007',
-    reason: 'themes have been temporarily disabled due to a bug, they will be back soon.',
-  },
-  green: {
-    code: 'E007',
-    reason: 'themes have been temporarily disabled due to a bug, they will be back soon.',
-  },
-  blue: {
-    code: 'E007',
-    reason: 'themes have been temporarily disabled due to a bug, they will be back soon.',
+    reason: 'failed to enable grey theme. Error code: E008',
   },
   grey: {
     code: 'E007',
-    reason: 'themes have been temporarily disabled due to a bug, they will be back soon.',
+    reason: 'failed to enable grey theme. Error code: E008',
   },
   // Add disabled commands here by name.
   // Example:
