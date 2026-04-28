@@ -25,6 +25,8 @@
         <div class="terminal-screen">
           <div class="scanlines"></div>
           <div class="terminal-content">
+            <div class="line prompt input-line">TSCPP@about:~$ <input id="commandInput" autocomplete="off" spellcheck="false" /></div>
+            <div class="output-lines">
             <div class="line timer-line">Timeout in: <span id="timeoutTimer">20:00</span></div>
             <div class="line typing">About TSCPP</div>
             <div class="line typing">TSCPP is short for The Secure Contain Protect Project, an SCP Foundation community.</div>
@@ -33,7 +35,7 @@
             <div class="line typing">If you see an error code in the site, open the error codes page to get the meaning.</div>
             <div class="line typing">Use the errorcodes page for explanations of common site errors.</div>
             <div class="line typing">to see the list of commands for the terminal, type 'help' to see the full list</div>
-            <div class="line prompt input-line">TSCPP@about:~$ <input id="commandInput" autocomplete="off" spellcheck="false" /></div>
+            </div>
           </div>
         </div>
       </div>
@@ -44,13 +46,53 @@
         const typingLines = Array.from(document.querySelectorAll('.terminal-content .line.typing'));
         const commandInput = document.getElementById('commandInput');
         const terminalContent = document.querySelector('.terminal-content');
+        const terminalScreen = document.querySelector('.terminal-screen');
+        const bootOverlay = createBootOverlay(terminalScreen);
+        document.body.classList.add('console-mode');
+        initializeSoundToggle();
+        terminalContent.classList.add('hidden');
         const lockableStatuses = Array.from(document.querySelectorAll('.terminal-content [data-lockable].status'));
         const pageLockEnabled = lockableStatuses.some((el) => el.classList.contains('error') || el.classList.contains('critical'));
+        const bootLines = [
+          'AE SOFTWARE SYSTEMS BIOS v4.75PCM',
+          'Copyright (C) 1994-99 AE Software, Inc. All Rights Reserved.',
+          '',
+          'POST (Power-On Self Test)',
+          '================================',
+          'CPU: Intext 03037GX',
+          'Base Memory: 640KB OK',
+          'Extended Memory: 196608KB OK',
+          '',
+          'Detecting Hardware...',
+          '  Primary IDE Master: IBX4580 AE',
+          '  Primary IDE Slave: None',
+          '  Floppy Drive A: 1.44MB 3.5"',
+          '  Serial Ports: COM1, COM2',
+          '  Video Adapter: VGA Color',
+          '',
+          'System ready.',
+          'Loading AE OS v4.75PCM ...',
+        ];
+
+        async function runBootSequence() {
+          for (let i = 0; i < bootLines.length; i++) {
+            await typeBootLine(bootOverlay, bootLines[i], wait);
+            await wait(40 + Math.random() * 20);
+          }
+          playBootSound();
+          bootOverlay.classList.add('fade-out');
+          await wait(260);
+          bootOverlay.remove();
+          terminalContent.classList.remove('hidden');
+          terminalScreen.classList.add('show-content');
+        }
         if (lockableStatuses.length > 0) {
           setBootLockState(pageLockEnabled);
         }
         if (getBootLockState()) {
           showBootFailure(terminalContent);
+          terminalContent.classList.remove('hidden');
+          bootOverlay.remove();
           return;
         }
 
@@ -92,6 +134,7 @@
           for (const { source, target } of targetTextNodes) {
             for (let i = 0; i < source.length; i++) {
               target.nodeValue += source[i];
+              playTypeSound();
               const charDelay = 16 + Math.random() * 30;
               await wait(charDelay);
             }
@@ -102,8 +145,13 @@
           const line = document.createElement('div');
           line.className = `line ${cssClass}`.trim();
           line.textContent = text;
-          commandInput.closest('.terminal-content').insertBefore(line, commandInput.parentElement);
-          line.scrollIntoView({ behavior: 'smooth', block: 'end' });
+          const outputContainer = document.querySelector('.output-lines') || commandInput.closest('.terminal-content');
+          outputContainer.appendChild(line);
+          const lineBox = line.getBoundingClientRect();
+          const containerBox = outputContainer.getBoundingClientRect();
+          if (lineBox.bottom > containerBox.bottom || lineBox.top < containerBox.top) {
+            line.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          }
         }
 
         function handleCommand(command) {
@@ -173,6 +221,7 @@
         initializeSessionTimeout(commandInput, appendOutput);
 
         (async () => {
+          await runBootSequence();
           for (let i = 0; i < typingLines.length; i++) {
             await typeLine(typingLines[i], i);
           }

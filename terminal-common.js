@@ -47,10 +47,21 @@ function initializeVintageCursor(input) {
   wrapper.appendChild(cursor);
   wrapper.appendChild(measure);
 
+  const inputStyle = window.getComputedStyle(input);
+  measure.style.font = inputStyle.font;
+  measure.style.letterSpacing = inputStyle.letterSpacing;
+  measure.style.fontVariant = inputStyle.fontVariant;
+  measure.style.fontStyle = inputStyle.fontStyle;
+  measure.style.fontWeight = inputStyle.fontWeight;
+  measure.style.textTransform = inputStyle.textTransform;
+  measure.style.padding = inputStyle.padding;
+
   function updateCursor() {
-    measure.textContent = input.value || ' ';
+    measure.textContent = input.value || '\u00a0';
     const width = measure.getBoundingClientRect().width;
-    const left = input.offsetLeft + width + 2;
+    const wrapperRect = wrapper.getBoundingClientRect();
+    const inputRect = input.getBoundingClientRect();
+    const left = inputRect.left - wrapperRect.left + width + 2;
     cursor.style.left = `${left}px`;
     cursor.classList.toggle('hidden', !input.matches(':focus'));
   }
@@ -59,6 +70,100 @@ function initializeVintageCursor(input) {
   input.addEventListener('focus', updateCursor);
   input.addEventListener('blur', updateCursor);
   updateCursor();
+}
+
+const terminalAudioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+function ensureAudioContext() {
+  if (terminalAudioContext.state === 'suspended') {
+    terminalAudioContext.resume().catch(() => {});
+  }
+}
+
+function playTone(frequency = 880, duration = 0.016, type = 'square', volume = 0.05) {
+  if (!terminalAudioContext) return;
+  try {
+    const oscillator = terminalAudioContext.createOscillator();
+    const gain = terminalAudioContext.createGain();
+    oscillator.type = type;
+    oscillator.frequency.value = frequency;
+    gain.gain.value = volume;
+    oscillator.connect(gain);
+    gain.connect(terminalAudioContext.destination);
+    oscillator.start();
+    oscillator.stop(terminalAudioContext.currentTime + duration);
+  } catch (error) {
+    // Audio may be blocked by browser autoplay policy.
+  }
+}
+
+function isSoundEnabled() {
+  return localStorage.getItem('terminalSoundEnabled') !== 'false';
+}
+
+function updateSoundToggle(button) {
+  if (!button) return;
+  const enabled = isSoundEnabled();
+  button.classList.toggle('sound-toggle--off', !enabled);
+  button.textContent = enabled ? '🔊' : '🔇';
+  button.setAttribute('aria-pressed', String(enabled));
+  button.title = enabled ? 'Typing sound enabled' : 'Typing sound muted';
+}
+
+function initializeSoundToggle() {
+  const titleBar = document.querySelector('.title-bar');
+  if (!titleBar) return null;
+
+  let button = document.getElementById('soundToggle');
+  if (!button) {
+    button = document.createElement('button');
+    button.id = 'soundToggle';
+    button.type = 'button';
+    button.className = 'sound-toggle';
+    titleBar.appendChild(button);
+  }
+
+  updateSoundToggle(button);
+  button.addEventListener('click', () => {
+    const enabled = !isSoundEnabled();
+    localStorage.setItem('terminalSoundEnabled', enabled ? 'true' : 'false');
+    updateSoundToggle(button);
+  });
+  return button;
+}
+
+function playTypeSound() {
+  if (!isSoundEnabled()) return;
+  ensureAudioContext();
+  playTone(900 + Math.random() * 100, 0.01, 'square', 0.03);
+}
+
+function playBootSound() {
+  if (!isSoundEnabled()) return;
+  ensureAudioContext();
+  playTone(240, 0.08, 'sine', 0.04);
+}
+
+function createBootOverlay(screen) {
+  const overlay = document.createElement('div');
+  overlay.className = 'boot-overlay';
+  const lines = document.createElement('div');
+  lines.className = 'boot-lines';
+  overlay.appendChild(lines);
+  screen.appendChild(overlay);
+  return overlay;
+}
+
+async function typeBootLine(overlay, text, waitFn) {
+  const container = overlay.querySelector('.boot-lines');
+  const line = document.createElement('div');
+  line.className = 'boot-line';
+  container.appendChild(line);
+  for (let i = 0; i < text.length; i++) {
+    line.textContent += text[i];
+    playTypeSound();
+    await waitFn(16 + Math.random() * 32);
+  }
 }
 
 function setBootLockState(value) {
