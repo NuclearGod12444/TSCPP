@@ -2,7 +2,7 @@
 const disabledCommands = {
   lore: {
     code: 'E004',
-    reason: 'This has not yet been finished, a page is planned to be added about SCP, TSCPP, and Terminal lore.',
+    reason: 'This has not yet been finished, a page is planned to be added about SCP, TSCPP, and Terminal lore',
   },
   "theme grey": {
     code: 'E008',
