@@ -50,7 +50,8 @@ function initializeVintageCursor(input) {
   function updateCursor() {
     measure.textContent = input.value || ' ';
     const width = measure.getBoundingClientRect().width;
-    cursor.style.left = `${width + 2}px`;
+    const left = input.offsetLeft + width + 2;
+    cursor.style.left = `${left}px`;
     cursor.classList.toggle('hidden', !input.matches(':focus'));
   }
 
