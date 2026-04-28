@@ -5,11 +5,11 @@ const disabledCommands = {
     reason: 'this is an upcoming feature, which is currently unavailable',
   },
   "theme grey": {
-    code: 'E007',
+    code: 'E008',
     reason: 'failed to enable grey theme. Error code: E008',
   },
   grey: {
-    code: 'E007',
+    code: 'E008',
     reason: 'failed to enable grey theme. Error code: E008',
   },
   // Add disabled commands here by name.

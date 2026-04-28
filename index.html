@@ -55,24 +55,24 @@
         const lockableStatuses = Array.from(document.querySelectorAll('.terminal-content [data-lockable].status'));
         const pageLockEnabled = lockableStatuses.some((el) => el.classList.contains('error') || el.classList.contains('critical'));
         const bootLines = [
-          'AE SOFTWARE SYSTEMS BIOS v4.75PCM',
-          'Copyright (C) 1994-99 AE Software, Inc. All Rights Reserved.',
+          'SCP SOFTWARE SYSTEMS BIOS v7.97PCR',
+          'Copyright (C) 1993-99 SCP Software, Inc. All Rights Reserved.',
           '',
           'POST (Power-On Self Test)',
           '================================',
-          'CPU: Intext 03037GX',
-          'Base Memory: 640KB OK',
-          'Extended Memory: 196608KB OK',
+          'CPU: Intext 05083GX',
+          'Base Memory: 128MB OK',
+          'Extended Memory: 1GB OK',
           '',
           'Detecting Hardware...',
-          '  Primary IDE Master: IBX4580 AE',
+          '  Primary IDE Master: IBX9750 SCP',
           '  Primary IDE Slave: None',
-          '  Floppy Drive A: 1.44MB 3.5"',
+          '  Floppy Drive A: 5GB 5.25"',
           '  Serial Ports: COM1, COM2',
           '  Video Adapter: VGA Color',
           '',
           'System ready.',
-          'Loading AE OS v4.75PCM ...',
+          'Loading SCP OS v7.97PCR ...',
         ];
 
         async function runBootSequence() {
