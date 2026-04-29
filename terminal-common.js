@@ -306,3 +306,29 @@ function handleThemeCommand(normalized, appendOutput) {
   appendOutput(`Terminal theme set to ${themeName.toUpperCase()}.`, 'typing active');
   return true;
 }
+
+
+
+(function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const source = urlParams.get('source');
+
+    if (source === 'fbi_hq') {
+        sessionStorage.setItem('fbi_clearance', 'active');
+        
+        const output = document.querySelector('.output-lines');
+        if (output) {
+            const alertLine = document.createElement('div');
+            alertLine.className = 'line warningnote';
+            alertLine.style.color = '#ff5555';
+            alertLine.innerText = ">> [ALERT] INCOMING FBI_MAINFRAME UPLINK DETECTED";
+            output.appendChild(alertLine);
+        }
+
+        document.body.style.transition = "box-shadow 0.5s";
+        document.body.style.boxShadow = "inset 0 0 100px rgba(255, 0, 0, 0.5)";
+        setTimeout(() => {
+            document.body.style.boxShadow = "none";
+        }, 2000);
+    }
+})();
