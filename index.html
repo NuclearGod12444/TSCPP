@@ -50,6 +50,8 @@
         const terminalContent = document.querySelector('.terminal-content');
         const terminalScreen = document.querySelector('.terminal-screen');
         const bootOverlay = createBootOverlay(terminalScreen);
+        const urlParams = new URLSearchParams(window.location.search);
+        const isFromFBI = urlParams.get('source') === 'fbi_hq';
         document.body.classList.add('console-mode');
         initializeSoundToggle();
         terminalContent.classList.add('hidden');
@@ -59,22 +61,28 @@
           'SCP SOFTWARE SYSTEMS BIOS v7.97PCR',
           'Copyright (C) 1993-99 SCP Software, Inc. All Rights Reserved.',
           '',
-          'POST (Power-On Self Test)',
-          '================================',
-          'CPU: Intext 05083GX',
-          'Base Memory: 128MB OK',
-          'Extended Memory: 1GB OK',
-          '',
-          'Detecting Hardware...',
-          '  Primary IDE Master: IBX9750 SCP',
-          '  Primary IDE Slave: None',
-          '  Floppy Drive A: 5GB 5.25"',
-          '  Serial Ports: COM1, COM2',
-          '  Video Adapter: VGA Color',
-          '',
-          'System ready.',
-          'Loading SCP OS v7.97PCR ...',
-        ];
+          ...(isFromFBI ? [
+          '>> [ALERT] INCOMING SECURE UPLINK DETECTED', 
+          '>> AUTHORIZATION: FBI_MAINFRAME_ROOT',
+          '>> HANDSHAKE: VERIFIED',
+          ''
+        ] : []),
+        'POST (Power-On Self Test)',
+        '================================',
+        'CPU: Intext 05083GX',
+        'Base Memory: 128MB OK',
+        'Extended Memory: 1GB OK',
+        '',
+        'Detecting Hardware...',
+        '  Primary IDE Master: IBX9750 SCP',
+        '  Primary IDE Slave: None',
+        '  Floppy Drive A: 5GB 5.25"',
+        '  Serial Ports: COM1, COM2',
+        '  Video Adapter: VGA Color',
+        '',
+        'System ready.',
+        'Loading SCP OS v7.97PCR ...',
+      ];
 
         async function runBootSequence() {
           for (let i = 0; i < bootLines.length; i++) {
