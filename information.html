@@ -181,6 +181,12 @@
             return;
           }
 
+          if (normalized === 'advterminal' || normalized === 'open advterminal') {
+            appendOutput('Opening Advanced Terminal...', 'typing active');
+            setTimeout(() => window.location.href = 'https://nucleargod12444.github.io/Agent-TerminalOS/', 600);
+            return;
+          }
+
           if (normalized === 'discord' || normalized === 'open discord') {
             appendOutput('Opening Discord page...', 'typing active');
             setTimeout(() => window.location.href = 'discord.html', 600);

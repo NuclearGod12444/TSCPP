@@ -44,6 +44,7 @@
             <div class="line typing">lore - opens a page with the lore of the scps and foundation.</div>
             <div class="line typing">rules - open the Rules page.</div>
             <div class="line typing">discord - open the Discord info page.</div>
+            <div class="line typing">advterminal - open the Advanced Terminal.</div>
             <div class="line typing">home - return to the main page from here.</div>
             <div class="line typing">commands - show the commands section again.</div>
             <div class="line typing">[Notes]</div>
@@ -205,6 +206,12 @@
           if (normalized === 'info' || normalized === 'about' || normalized === 'information') {
             appendOutput('Opening About TSCPP page...', 'typing active');
             setTimeout(() => window.location.href = 'information.html', 600);
+            return;
+          }
+
+          if (normalized === 'advterminal' || normalized === 'open advterminal') {
+            appendOutput('Opening Advanced Terminal...', 'typing active');
+            setTimeout(() => window.location.href = 'https://nucleargod12444.github.io/Agent-TerminalOS/', 600);
             return;
           }
 
