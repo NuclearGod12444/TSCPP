@@ -6,6 +6,14 @@
     <title>TSCPP About</title>
     <link rel="icon" type="image/png" href="TSCPP.png">
     <link rel="stylesheet" href="style.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<link rel="manifest" href="manifest.json">
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('serviceworker.js')
+      .then(() => console.log("Service Worker Registered"));
+  }
+</script>
   </head>
   <body>
     <div class="terminal-shell">
