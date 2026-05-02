@@ -1,0 +1,23 @@
+{
+  "short_name": "TSCPP MAIN",
+  "name": "TSCPP Main Terminal",
+  "description": "The main terminal for TSCPP, providing a powerful and user-friendly interface for managing your projects and tasks. the TSCPP Advanced is way different.",
+  "icons": [
+    {
+      "src": "TSCPP.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "TSCPP.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/TSCPP/index.html",
+  "scope": "/TSCPP/",
+  "id": "/TSCPP/",
+  "background_color": "#000000",
+  "display": "fullscreen",
+  "theme_color": "#000000"
+}
